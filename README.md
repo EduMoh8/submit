@@ -46,16 +46,17 @@ we created the world’s most *uselessly amazing* tool to measure sarcasm.
 ---
 
 ## Implementation
-
-### Installation
-```bash
-git clone https://github.com/edumoh8/ooku-core.git
-cd ooku-core
-pip install -r requirements.txt
-
-
 <h3>SCREENSHOT</h3>
 <img src="a.png">
 <img src="b.png">
 <img src="c.png">
 
+### Installation
+```bash
+git clone https://github.com/edumoh8/ooku-core.git
+
+pip install -r requirements.txt
+python wholecode.py
+
+
+..
