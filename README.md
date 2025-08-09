@@ -54,3 +54,8 @@ cd ooku-core
 pip install -r requirements.txt
 
 
+<h3>SCREENSHOT</h3>
+<img src="a.png">
+<img src="b.png">
+<img src="c.png">
+
