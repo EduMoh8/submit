@@ -1,0 +1,194 @@
+/* Base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #181c24;
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* Split layout */
+.split-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left panel */
+.left-panel {
+    background: #181c24;
+    width: 32vw;
+    min-width: 260px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 3px solid #ffd600;
+    padding: 2rem 1rem;
+    gap: 2.5rem;
+}
+
+.logo {
+    width: 160px;
+    margin-bottom: 2rem;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.github-icon {
+    width: 48px;
+    height: 48px;
+    filter: invert(1);
+}
+
+.yellow-btn {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #ffd600;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-top: auto;
+}
+
+.yellow-btn:hover {
+    background: #ffd600;
+    color: #181c24;
+}
+
+/* Right panel */
+.right-panel {
+    flex: 1;
+    background: #21252e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.main-title {
+    color: #ffd600;
+    font-size: 3rem;
+    font-family: 'Segoe Script', 'Comic Sans MS', cursive, sans-serif;
+    margin-bottom: 3rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 480px;
+}
+
+.feature-card {
+    background: #181c24;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    font-size: 1.2rem;
+    margin: 0 auto;
+    border: none;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.feature-card strong {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.feature-card:hover {
+    box-shadow: 0 8px 32px #ffd60044;
+    transform: translateY(-4px) scale(1.03);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .split-container {
+        flex-direction: column;
+    }
+    .left-panel {
+        width: 100vw;
+        max-width: none;
+        border-right: none;
+        border-bottom: 3px solid #ffd600;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem 0.5rem;
+    }
+    .right-panel {
+        padding: 2rem 0.5rem;
+    }
+    .main-title {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-title {
+        font-size: 2rem;
+    }
+    .feature-card {
+        padding: 1.2rem 0.7rem;
+        font-size: 1rem;
+    }
+    .logo {
+        width: 60px;
+        height: auto;
+    }
+    .github-icon {
+        width: 32px;
+        height: 32px;
+    }
+    .yellow-btn {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+    }
+    
+}
+/* Add to ook.css */
+.feature-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.feature-card-link .feature-card:hover {
+    cursor: pointer;
+}
+.damu {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+}
+footer {
+    background: #181c24;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

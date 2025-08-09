@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ഊക്CORE</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ook_main.css') }}">
+</head>
+<body>
+  <div class="split-container">
+    <aside class="left-panel">
+      <img src="{{ url_for('static', filename='dammu.png') }}" alt="damu" class="damu" />
+      <button class="yellow-btn">Welcome To ഊക് മുക്‌ </button>
+    </aside>
+    <main class="right-panel">
+      <h1 class="main-title">ഊക്CORE</h1>
+      <div class="card-list">
+        <a href="{{ url_for('generator') }}" class="feature-card-link">
+          
+        </a>
+        <a href="{{ url_for('leaderboard') }}" class="feature-card-link">
+          <div class="feature-card">
+            <strong>ഊക് LeaderBoard</strong>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+</body>
+<footer>
+  <a href="https://www.youtube.com/watch?v=Y1UhSmNZcls&list=RDY1UhSmNZcls&start_radio=1">
+    <p class="footer-text">© Dedicated to PRAKASH Mathew</p>
+  </a>
+</footer>
+</html>

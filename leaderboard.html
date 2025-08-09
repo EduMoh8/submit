@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OOOOOOKKKKUUUUUUU!!!!!!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='leaderboard.css') }}">
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT -->
+    <aside class="left-panel" id="leftPanel">
+      <h3 class="side-title">Schematic</h3>
+      <div class="schematic" id="schematicList"></div>
+    </aside>
+
+    <!-- RIGHT -->
+    <main class="main-panel">
+      <header class="topbar">
+        <h1>ഊക്CORE — Leaderboard</h1>
+        <button id="openFormBtn" class="big-add">+ ADD PARTICIPANT</button>
+        <a href="{{ url_for('generator') }}" class="btn-secondary">Go to Generator</a>
+      </header>
+
+      <!-- Add Participant Modal -->
+      <div id="modal" class="modal" aria-hidden="true">
+        <div class="modal-card">
+          <h2>Add Participant</h2>
+          <label>
+            Name
+            <input id="inputName" type="text" placeholder="Player name">
+          </label>
+          <label>
+            Score
+            <input id="inputScore" type="number" value="0" min="0">
+          </label>
+          <label>
+            Avatar
+            <input id="inputImage" type="file" accept="image/*">
+          </label>
+          <div class="modal-actions">
+            <button id="cancelBtn" class="btn-secondary">Cancel</button>
+            <button id="submitBtn" class="btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Table -->
+      <section class="board-wrap">
+        <table class="board" id="board">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Mic</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+<script>
+let participants = [];
+const tbody = document.getElementById('tbody');
+const schematicList = document.getElementById('schematicList');
+
+function cryptoRandomId() { return 'p_' + Math.random().toString(36).slice(2,9); }
+function clamp(n, min=0, max=999999) { return Math.max(min, Math.min(max, Number(n)||0)); }
+
+// UPDATED MIC FUNCTION – always 6 seconds before score updates
+function startMic(playerId) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+
+    let hasUpdated = false;
+
+    recognition.start();
+
+    // Stop after 6 seconds
+    const timer = setTimeout(() => {
+        recognition.stop();
+    }, 6000);
+
+    // Wait until fully ended before updating
+    recognition.onend = function() {
+        clearTimeout(timer);
+        if (!hasUpdated) {
+            giveRandomPoints(playerId);
+            hasUpdated = true;
+        }
+    };
+
+    // Ignore early results
+    recognition.onresult = function() {};
+}
+
+function giveRandomPoints(playerId) {
+    const randomScore = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
+    const p = participants.find(p => p.id === playerId);
+    if (p) {
+        p.score = clamp(p.score + randomScore, 0);
+        renderAll(true);
+    }
+}
+
+function placeholderDataUri(name) {
+    const initials = (name || 'U').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+    const bg = '#2f3542';
+    const fg = '#ffd700';
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'>
+        <rect width='100%' height='100%' fill='${bg}' />
+        <text x='50%' y='55%' font-size='48' text-anchor='middle' fill='${fg}' font-family='Segoe UI, Arial' dy='.35em'>${initials}</text>
+    </svg>`;
+    return 'data:image/svg+xml;base64,' + btoa(svg);
+}
+
+function renderAll() {
+    participants.sort((a,b) => b.score - a.score);
+    tbody.innerHTML = '';
+    schematicList.innerHTML = '';
+
+    participants.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = p.id;
+
+        tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td><img class="avatar-small" src="${p.avatar || placeholderDataUri(p.name)}" alt="${p.name}"> ${p.name}</td>
+            <td><input type="number" class="score-input" value="${p.score}" min="0"></td>
+            <td><button class="mic-btn" title="Mic for ${p.name}">🎤</button></td>
+            <td><button class="btn-remove">✖</button></td>
+        `;
+
+        tr.querySelector('.score-input').addEventListener('change', e => {
+            p.score = clamp(e.target.value, 0);
+            renderAll();
+        });
+
+        tr.querySelector('.btn-remove').addEventListener('click', () => {
+            participants = participants.filter(x => x.id !== p.id);
+            renderAll();
+        });
+
+        tr.querySelector('.mic-btn').addEventListener('click', () => startMic(p.id));
+
+        tbody.appendChild(tr);
+
+        const item = document.createElement('div');
+        item.className = 'schematic-item';
+        item.innerHTML = `<img class="avatar-med" src="${p.avatar || placeholderDataUri(p.name)}"><div class="schem-label"><strong>${idx + 1}</strong></div>`;
+        schematicList.appendChild(item);
+    });
+}
+
+const modal = document.getElementById('modal');
+document.getElementById('openFormBtn').addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+});
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+function closeModal() {
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.getElementById('inputName').value = '';
+    document.getElementById('inputScore').value = '0';
+    document.getElementById('inputImage').value = '';
+}
+
+function readFileAsDataURL(file) {
+    return new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res(fr.result);
+        fr.onerror = rej;
+        fr.readAsDataURL(file);
+    });
+}
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+    const name = document.getElementById('inputName').value.trim() || 'Player';
+    const score = clamp(document.getElementById('inputScore').value, 0);
+    let avatar = null;
+    const file = document.getElementById('inputImage').files[0];
+    if (file) avatar = await readFileAsDataURL(file);
+
+    participants.push({ id: cryptoRandomId(), name, score, avatar });
+    closeModal();
+    renderAll();
+});
+
+renderAll();
+</script>
+</body>
+</html>
